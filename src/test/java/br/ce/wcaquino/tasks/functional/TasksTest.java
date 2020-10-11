@@ -1,5 +1,7 @@
 package br.ce.wcaquino.tasks.functional;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -7,21 +9,26 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class TasksTest {
 		
-	public WebDriver acessaAplicacao() {
-		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver/chromedriver");
+	public WebDriver acessaAplicacao() throws Exception {
+//		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver/chromedriver");
+//		
+//		WebDriver driver = new ChromeDriver();
 		
-		WebDriver driver = new ChromeDriver();
-		driver.navigate().to("http://localhost:8001/tasks");
+		DesiredCapabilities cap = DesiredCapabilities.chrome();
+		WebDriver driver = new RemoteWebDriver(new URL("http://172.20.0.1:4444/wd/hub"), cap);
+		driver.navigate().to("http://172.20.0.1:8001/tasks");
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		
 		return driver;
 	}
 
 	@Test
-	public void deveSalvarTarefaComSucesso() {
+	public void deveSalvarTarefaComSucesso()throws Exception {
 		
 		WebDriver driver = acessaAplicacao();
 
@@ -52,7 +59,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naoDeveSalvarTarefaSemDescricao() {
+	public void naoDeveSalvarTarefaSemDescricao() throws Exception{
 		
 		WebDriver driver = acessaAplicacao();
 
@@ -80,7 +87,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naoDeveSalvarTarefaSemData() {
+	public void naoDeveSalvarTarefaSemData() throws Exception{
 		
 		WebDriver driver = acessaAplicacao();
 
@@ -108,7 +115,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naoDeveSalvarTarefaComDataDoPassado() {
+	public void naoDeveSalvarTarefaComDataDoPassado() throws Exception{
 		
 		WebDriver driver = acessaAplicacao();
 
