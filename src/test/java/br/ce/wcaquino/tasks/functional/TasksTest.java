@@ -13,23 +13,23 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class TasksTest {
-		
+
 	public WebDriver acessaAplicacao() throws Exception {
 //		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver/chromedriver");
 //		
 //		WebDriver driver = new ChromeDriver();
-		
+
 		DesiredCapabilities cap = DesiredCapabilities.chrome();
 		WebDriver driver = new RemoteWebDriver(new URL("http://172.20.0.1:4444/wd/hub"), cap);
 		driver.navigate().to("http://172.20.0.1:8001/tasks");
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-		
+
 		return driver;
 	}
 
 	@Test
-	public void deveSalvarTarefaComSucesso()throws Exception {
-		
+	public void deveSalvarTarefaComSucesso() throws Exception {
+
 		WebDriver driver = acessaAplicacao();
 
 		try {
@@ -57,10 +57,10 @@ public class TasksTest {
 		}
 
 	}
-	
+
 	@Test
-	public void naoDeveSalvarTarefaSemDescricao() throws Exception{
-		
+	public void naoDeveSalvarTarefaSemDescricao() throws Exception {
+
 		WebDriver driver = acessaAplicacao();
 
 		try {
@@ -85,10 +85,10 @@ public class TasksTest {
 		}
 
 	}
-	
+
 	@Test
-	public void naoDeveSalvarTarefaSemData() throws Exception{
-		
+	public void naoDeveSalvarTarefaSemData() throws Exception {
+
 		WebDriver driver = acessaAplicacao();
 
 		try {
@@ -113,10 +113,10 @@ public class TasksTest {
 		}
 
 	}
-	
+
 	@Test
-	public void naoDeveSalvarTarefaComDataDoPassado() throws Exception{
-		
+	public void naoDeveSalvarTarefaComDataDoPassado() throws Exception {
+
 		WebDriver driver = acessaAplicacao();
 
 		try {
@@ -145,5 +145,30 @@ public class TasksTest {
 
 	}
 
+	@Test
+	public void deveRemoverTarefaComSucesso() throws Exception {
 
+		WebDriver driver = acessaAplicacao();
+
+		try {
+
+			// inserir
+			driver.findElement(By.id("addTodo")).click();
+			driver.findElement(By.id("task")).sendKeys("Teste via selinium");
+			driver.findElement(By.id("dueDate")).sendKeys("20/10/2020");
+			driver.findElement(By.id("saveButton")).click();
+			String mensagem = driver.findElement(By.id("message")).getText();
+			Assert.assertEquals("Success!", mensagem);
+
+			// remover
+			driver.findElement(By.xpath("//a[@class=''btn btn-outilne-danger btn-sm]")).click();
+			mensagem = driver.findElement(By.id("message")).getText();
+			Assert.assertEquals("Success!", mensagem);
+
+		} finally {
+			// fechar o brwoser
+			driver.quit();
+		}
+
+	}
 }
